@@ -17,33 +17,35 @@ class SeasonEpisodesContent extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CachedNetworkImage(
-          imageUrl: episode.image!.medium!,
-          width: Sizes.dimen_180.w,
-          imageBuilder: (context, imageProvider) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(Sizes.dimen_8.h),
-              child: Image(
-                image: imageProvider,
+        if (episode.image != null)
+          CachedNetworkImage(
+            imageUrl: episode.image!.medium!,
+            width: Sizes.dimen_180.w,
+            imageBuilder: (context, imageProvider) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(Sizes.dimen_8.h),
+                child: Image(
+                  image: imageProvider,
+                ),
+              );
+            },
+          ),
+        if (episode.summary != null)
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: Sizes.dimen_8.w),
+              child: Text(
+                episode.summary!.length > 190
+                    ? episode.summary!
+                        .substring(0, 190)
+                        .replaceAll(RegExp(r'<p>|</p>|<b>|</b>|<i>|</i>'), '')
+                    : episode.summary!
+                        .replaceAll(RegExp(r'<p>|</p>|<b>|</b>|<i>|</i>'), ''),
+                softWrap: true,
+                style: Theme.of(context).textTheme.bodyText2,
               ),
-            );
-          },
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: Sizes.dimen_8.w),
-            child: Text(
-              episode.summary!.length > 190
-                  ? episode.summary!
-                      .substring(0, 190)
-                      .replaceAll(RegExp(r'<p>|</p>|<b>|</b>|<i>|</i>'), '')
-                  : episode.summary!
-                      .replaceAll(RegExp(r'<p>|</p>|<b>|</b>|<i>|</i>'), ''),
-              softWrap: true,
-              style: Theme.of(context).textTheme.bodyText2,
             ),
           ),
-        ),
       ],
     );
   }
